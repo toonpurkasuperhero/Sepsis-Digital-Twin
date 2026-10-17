@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sepsis Digital Twin</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <h1>Sepsis Digital Twin</h1>
+    <span class="sub">ICU early warning · replay of an external hospital</span>
+  </div>
+  <div class="banner" role="note">
+    <span class="banner-icon" aria-hidden="true">!</span>
+    Research prototype. Not for clinical decisions. Decision support only.
+  </div>
+  <div class="top-actions">
+    <button id="btn-card" class="ghost">Model card</button>
+    <button id="btn-theme" class="ghost" aria-label="Toggle dark mode">Theme</button>
+  </div>
+</header>
+
+<section class="controls" aria-label="Replay controls">
+  <label class="clock">
+    <span>Replay clock</span>
+    <button id="btn-back" class="icon" aria-label="One hour back">‹</button>
+    <input id="clock" type="range" min="0" max="72" value="24" aria-label="ICU hour">
+    <button id="btn-fwd" class="icon" aria-label="One hour forward">›</button>
+    <output id="clock-out">ICU hour 24</output>
+  </label>
+  <label class="check">Cohort <select id="cohort" aria-label="Patient cohort"></select></label>
+  <button id="btn-play" class="ghost">Play</button>
+  <label class="check"><input id="only-alerts" type="checkbox"> Alerts only</label>
+  <label class="check" title="Teaching/replay only: reveals the recorded future"><input id="show-outcome" type="checkbox"> Show recorded outcome</label>
+  <span id="cohort-note" class="muted"></span>
+</section>
+
+<main class="layout">
+  <aside class="ward" aria-label="Patient list">
+    <div class="ward-head">
+      <h2>Patients in ICU</h2>
+      <span id="ward-count" class="muted"></span>
+    </div>
+    <table class="ward-table">
+      <thead><tr><th>Patient</th><th>Hour</th><th class="num">6 h risk</th><th>Last 12 h</th></tr></thead>
+      <tbody id="ward-body"></tbody>
+    </table>
+  </aside>
+
+  <section class="detail" id="detail" aria-live="polite">
+    <div class="empty">Select a patient to see their twin.</div>
+  </section>
+</main>
+
+<dialog id="card-dialog">
+  <form method="dialog"><button class="ghost close" aria-label="Close">Close</button></form>
+  <div id="card-body"></div>
+</dialog>
+
+<div id="tooltip" class="tooltip" role="status" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# Run settings. Point `mimic_root` at the full MIMIC-IV download (the folder
+# that contains hosp/ and icu/) to run on the real cohort.
+mimic_root: data/raw/mimic-iv-demo/2.2
+output_root: data/processed
+pipeline_version: "0.1.0"
+
+cohort:
+  min_age: 18
+  min_icu_los_hours: 4      # stays shorter than this cannot carry a 6 h prediction
+  first_stay_only: false
+
+labels:
+  # Sepsis-3 suspected infection (Seymour et al. 2016, JAMA): culture within
+  # 72 h after an antibiotic, or antibiotic within 24 h after a culture.
+  abx_then_culture_h: 72
+  culture_then_abx_h: 24
+  # SOFA >= 2 must occur from 48 h before to 24 h after suspicion time.
+  sofa_window_before_h: 48
+  sofa_window_after_h: 24
+  sofa_threshold: 2
+  baseline_sofa: 0          # Sepsis-3 default when pre-infection SOFA is unknown
+  shock_lactate_mmol: 2.0
+  horizons_h: [6, 12]
+
+environment:
+  # Air-quality and weather inputs are kept, per project decision, with a
+  # deliberately tiny, capped effect. MIMIC-IV shifts dates and withholds
+  # location, so these cannot be linked for MIMIC patients and stay masked
+  # until prospective data provides them.
+  features: [pm25_ugm3, ambient_temp_c, ambient_humidity_pct]
+  max_contribution_logit: 0.05   # hard cap on |effect| of all environment inputs combined
+  l2_penalty: 10.0               # strong shrinkage toward zero during training

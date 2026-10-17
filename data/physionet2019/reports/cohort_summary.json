@@ -1,0 +1,17 @@
+{
+  "icu_stays": 40336,
+  "by_set": {
+    "A": 20336,
+    "B": 20000
+  },
+  "icu_hours": 1573512,
+  "median_age": 63.11,
+  "female_pct": 44.1,
+  "sepsis_pct_of_stays": 7.27,
+  "sepsis_at_admission_pct": 1.06,
+  "sepsis_pct_by_set": {
+    "A": 8.8,
+    "B": 5.71
+  },
+  "positive_eligible_hours_6h_pct": 0.961
+}

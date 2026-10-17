@@ -1,0 +1,41 @@
+00:01:27 schema: 9 vitals, 25 labs, 7 L1-derived, 14 L2-derived, 6 static, 3 env
+00:01:28 40336 stays built
+00:01:28 split: train 14235, val 3050, internal test 3051, external (set B) 20000
+00:01:28 Phase 3: training causal imputer
+00:01:31 imputer epoch 0: val NLL -0.0216
+00:01:31 imputer epoch 1: val NLL -0.0404
+00:01:32 imputer epoch 2: val NLL -0.0512
+00:01:32 imputer epoch 3: val NLL -0.0546
+00:01:33 imputer epoch 4: val NLL -0.0650
+00:01:33 imputer epoch 5: val NLL -0.0678
+00:01:34 imputer epoch 6: val NLL -0.0711
+00:01:34 imputer epoch 7: val NLL -0.0729
+00:01:35 imputer epoch 8: val NLL -0.0762
+00:01:35 imputer epoch 9: val NLL -0.0777
+00:01:36 imputer epoch 10: val NLL -0.0788
+00:01:36 imputer epoch 11: val NLL -0.0789
+00:01:37 imputer epoch 12: val NLL -0.0815
+00:01:37 imputer epoch 13: val NLL -0.0824
+00:01:38 imputer epoch 14: val NLL -0.0827
+00:01:39 Phase 3 imputation: {'coverage_90_median': 0.9214485757550317, 'coverage_90_range': [0.8065978736710444, 0.9622489600572528], 'gru_beats_locf_share': 0.9583333333333334, 'mae_ratio_gru_over_locf_median': 0.9045514404163507}
+00:01:39 Phase 3: encoder pre-training (next-hour forecasting)
+00:01:42 pre-train epoch 0: forecast loss 1.3520
+00:01:44 pre-train epoch 1: forecast loss 1.1757
+00:01:46 pre-train epoch 2: forecast loss 1.1332
+00:01:46 Phase 4: fusion training (pos_weight [9.105645179748535, 6.501394748687744])
+00:01:51 epoch 0: train loss 3.0552  val AUPRC(6h) 0.0316
+00:01:55 epoch 1: train loss 0.7129  val AUPRC(6h) 0.0470
+00:02:00 epoch 2: train loss 0.4304  val AUPRC(6h) 0.0642
+00:02:05 epoch 3: train loss 0.4354  val AUPRC(6h) 0.0570
+00:02:09 epoch 4: train loss 0.4218  val AUPRC(6h) 0.0588
+00:02:13 epoch 5: train loss 0.4118  val AUPRC(6h) 0.0563
+00:02:26 internal_test 6h: AUROC 0.825 AUPRC 0.066
+00:03:31 external_test_setB 6h: AUROC 0.784 AUPRC 0.038
+00:03:41 internal_test 12h: AUROC 0.814 AUPRC 0.120
+00:04:46 external_test_setB 12h: AUROC 0.760 AUPRC 0.066
+00:05:16 baseline: gradient boosting
+00:05:52 GBM internal_test 6h: AUROC 0.809 AUPRC 0.060
+00:06:57 GBM external_test_setB 6h: AUROC 0.713 AUPRC 0.026
+00:07:23 GBM internal_test 12h: AUROC 0.805 AUPRC 0.119
+00:08:26 GBM external_test_setB 12h: AUROC 0.691 AUPRC 0.049
+00:08:26 done. gates: {"phase3_interval_coverage_near_90": true, "phase3_downstream_auroc_change_lt_0.01": true, "phase4_external_auroc": 0.7837886660503308, "phase4_external_calibration_slope": 0.7694181799888611, "phase4_external_alerts_per_patient_day": 6.59785473006341, "phase4_note": "AUROC/alert targets must be agreed with clinicians; numbers reported, not auto-passed"}

@@ -1,0 +1,9 @@
+{
+  "icu_stays": 2383,
+  "icu_hours": 139393,
+  "hospitals": 186,
+  "stays_with_vasopressor": 178,
+  "stays_with_iv_fluid": 653,
+  "hours_with_vasopressor": 5460,
+  "hours_with_fluid_ge_250ml": 1563
+}

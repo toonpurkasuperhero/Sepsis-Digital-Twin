@@ -1,0 +1,431 @@
+{
+  "data": {
+    "train": 14235,
+    "val": 3050,
+    "internal_test": 3051,
+    "external_test": 20000,
+    "schema": {
+      "primary": [
+        "heart_rate",
+        "spo2",
+        "temperature",
+        "sbp",
+        "map",
+        "dbp",
+        "resp_rate",
+        "fio2",
+        "etco2"
+      ],
+      "secondary": [
+        "base_excess",
+        "bicarbonate",
+        "ph",
+        "paco2",
+        "ast",
+        "bun",
+        "chloride",
+        "creatinine",
+        "glucose_lab",
+        "lactate",
+        "potassium",
+        "bilirubin",
+        "hemoglobin",
+        "wbc",
+        "fibrinogen",
+        "platelets",
+        "sao2",
+        "alk_phos",
+        "calcium",
+        "magnesium",
+        "phosphate",
+        "bilirubin_direct",
+        "troponin_i",
+        "hematocrit",
+        "ptt"
+      ],
+      "derived1": [
+        "fio2_eff",
+        "shock_index",
+        "pulse_pressure",
+        "map_any",
+        "sf_ratio",
+        "pf_estimate",
+        "rox"
+      ],
+      "derived2": [
+        "sofa_resp",
+        "sofa_coag",
+        "sofa_liver",
+        "sofa_cv",
+        "sofa_renal",
+        "sofa_label",
+        "sofa",
+        "sofa_n_observed",
+        "bun_creatinine_ratio",
+        "egfr_ckd_epi_2021",
+        "creatinine_baseline",
+        "kdigo_creat_stage",
+        "kdigo_stage",
+        "lactate_clearance_pct"
+      ],
+      "static": [
+        "age",
+        "female",
+        "hosp_adm_time_h",
+        "unit_MICU",
+        "unit_SICU",
+        "unit_unknown"
+      ],
+      "env": [
+        "pm25_ugm3",
+        "ambient_temp_c",
+        "ambient_humidity_pct"
+      ],
+      "max_age": {
+        "heart_rate": 2,
+        "spo2": 2,
+        "temperature": 8,
+        "sbp": 2,
+        "map": 2,
+        "dbp": 2,
+        "resp_rate": 2,
+        "fio2": 24,
+        "etco2": 4,
+        "base_excess": 12,
+        "bicarbonate": 24,
+        "ph": 12,
+        "paco2": 6,
+        "ast": 48,
+        "bun": 48,
+        "chloride": 24,
+        "creatinine": 48,
+        "glucose_lab": 24,
+        "lactate": 12,
+        "potassium": 24,
+        "bilirubin": 48,
+        "hemoglobin": 24,
+        "wbc": 48,
+        "fibrinogen": 48,
+        "platelets": 48,
+        "sao2": 6,
+        "alk_phos": 48,
+        "calcium": 48,
+        "magnesium": 48,
+        "phosphate": 48,
+        "bilirubin_direct": 48,
+        "troponin_i": 48,
+        "hematocrit": 24,
+        "ptt": 48
+      }
+    }
+  },
+  "phase3": {
+    "coverage_90_median": 0.9214485757550317,
+    "coverage_90_range": [
+      0.8065978736710444,
+      0.9622489600572528
+    ],
+    "gru_beats_locf_share": 0.9583333333333334,
+    "mae_ratio_gru_over_locf_median": 0.9045514404163507,
+    "downstream_auroc_6h": {
+      "all_observed": 0.825363738050418,
+      "15pct_hidden_carry_forward": 0.8272575221984734,
+      "15pct_hidden_gru_filled": 0.8273695249269358,
+      "delta_carry_forward": -0.0018937841480554107,
+      "delta_gru": -0.0020057868765178677
+    }
+  },
+  "training": {
+    "best_val_auprc_6h": 0.06416079522653607,
+    "history": [
+      {
+        "epoch": 0,
+        "train_loss": 3.0551865956173883,
+        "val_auprc_6h": 0.03155742212870445
+      },
+      {
+        "epoch": 1,
+        "train_loss": 0.7128982534590323,
+        "val_auprc_6h": 0.047016697627477545
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.43037224880047975,
+        "val_auprc_6h": 0.06416079522653607
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.4353661816984816,
+        "val_auprc_6h": 0.0569508942028101
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.42182339480639575,
+        "val_auprc_6h": 0.058821680463457246
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.4118193898333295,
+        "val_auprc_6h": 0.056334172593824776
+      }
+    ]
+  },
+  "phase4": {
+    "internal_test_6h": {
+      "hours": 120253,
+      "stays": 3023,
+      "positive_hours": 1446,
+      "auroc": 0.825363738050418,
+      "auroc_ci95": [
+        0.8011361666631553,
+        0.8447651749706581
+      ],
+      "auprc": 0.06562376014360909,
+      "auprc_ci95": [
+        0.05632249953097789,
+        0.08620547935167526
+      ],
+      "prevalence": 0.012024648487567902,
+      "brier_calibrated": 0.011489150114357471,
+      "calibration_slope": 1.0102661848068237,
+      "calibration_intercept": 0.05545631796121597,
+      "threshold": 0.007241929415613413,
+      "sensitivity": 0.8651452282157677,
+      "specificity": 0.5745116028516838,
+      "ppv": 0.024149646731786416,
+      "alerts_per_patient_day": 10.338602779140645,
+      "septic_stays_detected_pct": 91.28630705394191,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.007336554696008558,
+      "net_benefit_treat_all": 0.004817607390791727
+    },
+    "external_test_setB_6h": {
+      "hours": 759345,
+      "stays": 19777,
+      "positive_hours": 5473,
+      "auroc": 0.7837886660503308,
+      "auroc_ci95": [
+        0.767584744878518,
+        0.7980344601332575
+      ],
+      "auprc": 0.03818882613293111,
+      "auprc_ci95": [
+        0.033499817137061516,
+        0.04453753862805567
+      ],
+      "prevalence": 0.007207527756690979,
+      "brier_calibrated": 0.007138234097510576,
+      "calibration_slope": 0.7694181799888611,
+      "calibration_intercept": -1.1989465951919556,
+      "threshold": 0.007241929415613413,
+      "sensitivity": 0.7019915951032341,
+      "specificity": 0.7281899314472483,
+      "ppv": 0.018404614087529702,
+      "alerts_per_patient_day": 6.59785473006341,
+      "septic_stays_detected_pct": 80.73993471164309,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.003091126212126691,
+      "net_benefit_treat_all": -3.465282877076516e-05
+    },
+    "internal_test_12h": {
+      "hours": 120253,
+      "stays": 3023,
+      "positive_hours": 2825,
+      "auroc": 0.8144960346253219,
+      "auroc_ci95": [
+        0.7890007961223824,
+        0.8351553937285725
+      ],
+      "auprc": 0.12031164249432663,
+      "auprc_ci95": [
+        0.1065248702369738,
+        0.14296682826256804
+      ],
+      "prevalence": 0.02349213697016239,
+      "brier_calibrated": 0.021606948226690292,
+      "calibration_slope": 1.025083303451538,
+      "calibration_intercept": 0.09274844825267792,
+      "threshold": 0.011997406370937824,
+      "sensitivity": 0.8520353982300884,
+      "specificity": 0.5673348775419832,
+      "ppv": 0.045232457623933554,
+      "alerts_per_patient_day": 10.620408638453926,
+      "septic_stays_detected_pct": 90.45643153526972,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.014885665436796015,
+      "net_benefit_treat_all": 0.01163431261565198
+    },
+    "external_test_setB_12h": {
+      "hours": 759345,
+      "stays": 19777,
+      "positive_hours": 10667,
+      "auroc": 0.7603124068285982,
+      "auroc_ci95": [
+        0.7424419715240039,
+        0.7759736949104602
+      ],
+      "auprc": 0.0656840261995985,
+      "auprc_ci95": [
+        0.05871920414419286,
+        0.07342532598409451
+      ],
+      "prevalence": 0.014047632925212383,
+      "brier_calibrated": 0.013634751550853252,
+      "calibration_slope": 0.8525621891021729,
+      "calibration_intercept": -0.7785865068435669,
+      "threshold": 0.011997406370937824,
+      "sensitivity": 0.6803224899221899,
+      "specificity": 0.7152500808091062,
+      "ppv": 0.03292007457710156,
+      "alerts_per_patient_day": 6.967362661240938,
+      "septic_stays_detected_pct": 79.65179542981501,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.006147749432928468,
+      "net_benefit_treat_all": 0.002075122879035513
+    }
+  },
+  "stream_importance_external_6h": [
+    {
+      "stream": "E1_vitals",
+      "mean_gate_weight": 0.5870175957679749,
+      "auroc_drop_when_removed": 0.06092043529470759
+    },
+    {
+      "stream": "E2_labs",
+      "mean_gate_weight": 0.11037728190422058,
+      "auroc_drop_when_removed": 0.11091795239471758
+    },
+    {
+      "stream": "E3_static",
+      "mean_gate_weight": 0.30260515213012695,
+      "auroc_drop_when_removed": -0.020648693373025884
+    }
+  ],
+  "environment_branch": {
+    "cap_logit": 0.05,
+    "max_abs_contribution_at_3sd": 2.700950574308081e-09,
+    "note": "inputs masked (not linkable in this dataset)"
+  },
+  "baseline_gbm": {
+    "internal_test_6h": {
+      "hours": 120253,
+      "stays": 3023,
+      "positive_hours": 1446,
+      "auroc": 0.8090056526816316,
+      "auroc_ci95": [
+        0.78519336847216,
+        0.831092098589387
+      ],
+      "auprc": 0.060430023896753414,
+      "auprc_ci95": [
+        0.04986693361660676,
+        0.07913125755194321
+      ],
+      "prevalence": 0.012024648487567902,
+      "brier_calibrated": 0.011545968217068566,
+      "calibration_slope": 1.0607427116282115,
+      "calibration_intercept": 0.30106528433678514,
+      "threshold": 0.006048780487804878,
+      "sensitivity": 0.872060857538036,
+      "specificity": 0.5123267147558646,
+      "ppv": 0.021300675675675677,
+      "alerts_per_patient_day": 11.815089852228217,
+      "septic_stays_detected_pct": 96.2655601659751,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.00755413128447672,
+      "net_benefit_treat_all": 0.00601223423102877
+    },
+    "external_test_setB_6h": {
+      "hours": 759345,
+      "stays": 19777,
+      "positive_hours": 5473,
+      "auroc": 0.7128977506994467,
+      "auroc_ci95": [
+        0.6968666699021717,
+        0.7295566053927813
+      ],
+      "auprc": 0.025633484659494266,
+      "auprc_ci95": [
+        0.022934323988277248,
+        0.02923417815069521
+      ],
+      "prevalence": 0.007207527756690979,
+      "brier_calibrated": 0.007110921649618961,
+      "calibration_slope": 0.7282169639693248,
+      "calibration_intercept": -1.2143483096115593,
+      "threshold": 0.006048780487804878,
+      "sensitivity": 0.6181253425909008,
+      "specificity": 0.7057484559713054,
+      "ppv": 0.015021468755966627,
+      "alerts_per_patient_day": 7.118060960433005,
+      "septic_stays_detected_pct": 80.19586507072906,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.0026773673939737433,
+      "net_benefit_treat_all": 0.0011657987128849854
+    },
+    "internal_test_12h": {
+      "hours": 120253,
+      "stays": 3023,
+      "positive_hours": 2825,
+      "auroc": 0.8046860708621754,
+      "auroc_ci95": [
+        0.7771163789116726,
+        0.8267714304642353
+      ],
+      "auprc": 0.11905314112928025,
+      "auprc_ci95": [
+        0.09761950783434152,
+        0.14909219835087786
+      ],
+      "prevalence": 0.02349213697016239,
+      "brier_calibrated": 0.021791675642165578,
+      "calibration_slope": 1.0953010166601733,
+      "calibration_intercept": 0.38679331604251954,
+      "threshold": 0.016702421084891204,
+      "sensitivity": 0.8215929203539823,
+      "specificity": 0.6054859147733079,
+      "ppv": 0.04771008057885216,
+      "alerts_per_patient_day": 9.709129917756728,
+      "septic_stays_detected_pct": 95.02074688796681,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.012757133112092079,
+      "net_benefit_treat_all": 0.006905047333578634
+    },
+    "external_test_setB_12h": {
+      "hours": 759345,
+      "stays": 19777,
+      "positive_hours": 10667,
+      "auroc": 0.6911568556954555,
+      "auroc_ci95": [
+        0.6753925485533686,
+        0.7094174140701548
+      ],
+      "auprc": 0.04896617516166128,
+      "auprc_ci95": [
+        0.044028846362448734,
+        0.05468996201643642
+      ],
+      "prevalence": 0.014047632925212383,
+      "brier_calibrated": 0.013657247078609972,
+      "calibration_slope": 0.7056454669867459,
+      "calibration_intercept": -1.1495671656148243,
+      "threshold": 0.016702421084891204,
+      "sensitivity": 0.5500140620605606,
+      "specificity": 0.7478114756944908,
+      "ppv": 0.0301374085013484,
+      "alerts_per_patient_day": 6.152934436916026,
+      "septic_stays_detected_pct": 74.75516866158868,
+      "median_lead_time_h": 12.0,
+      "net_benefit": 0.0035028645154000755,
+      "net_benefit_treat_all": -0.002699882501791942
+    }
+  },
+  "gates": {
+    "phase3_interval_coverage_near_90": true,
+    "phase3_downstream_auroc_change_lt_0.01": true,
+    "phase4_external_auroc": 0.7837886660503308,
+    "phase4_external_calibration_slope": 0.7694181799888611,
+    "phase4_external_alerts_per_patient_day": 6.59785473006341,
+    "phase4_note": "AUROC/alert targets must be agreed with clinicians; numbers reported, not auto-passed"
+  }
+}

@@ -1,0 +1,103 @@
+# Project Proposal: Sepsis Digital Twin (SDT)
+
+## Real-Time Predictive Critical Care & Counterfactual Simulation Engine
+
+---
+
+## 1. Executive Summary & Core Concept
+
+Sepsis is a life-threatening organ dysfunction caused by a dysregulated host response to infection. In acute care settings, traditional monitoring is **reactive**—clinicians notice organ failure only after it occurs.
+
+The **Sepsis Digital Twin (SDT)** is an advanced, real-time virtual replica of a patient at high risk of sepsis. By continuously fusing high-frequency continuous telemetry (wearables/IoT vitals), intermittent laboratory blood panels, and static electronic health records (EHRs), the digital twin simulates the patient's unique physiological trajectory.
+
+### Core Objectives
+
+1. **Early Prediction:** Forecast the onset of septic shock and multi-organ failure **6 to 12 hours in advance** before overt clinical collapse.
+2. **Counterfactual "What-If" Simulation:** Empower physicians to test treatment strategies virtually (e.g., simulating a 500ml fluid bolus or antibiotic adjustment) and visualize how the risk curve responds before applying interventions to the real patient.
+
+---
+
+## 2. Technical Architecture: Multi-Tier Multimodal Fusion Network (MT-MFN)
+
+To handle messy, asynchronous hospital and wearable data, the system relies on a three-branch neural fusion architecture:
+
+* **Tier 1 Branch (High-Frequency Stream):** Uses a 1D-CNN combined with an LSTM network to process continuous 1-to-5 minute vital sign telemetry and capture acute rate-of-change slopes.
+* **Tier 2 Branch (Intermittent Labs):** Employs Masked Multi-Head Self-Attention to natively ingest sparse, irregularly spaced lab biomarker results without requiring fake imputation.
+* **Tier 3 Branch (Static Baseline & Controls):** Uses a Multilayer Perceptron (MLP) with entity embeddings to map patient demographics, comorbidities, surgical history, ongoing medications, and environmental AQI as baseline vulnerability weights.
+
+---
+
+## 3. Comprehensive Parameter Taxonomy
+
+Below is the complete parameter inventory required to power the Sepsis Digital Twin, categorized into Primary, Secondary, and Tertiary tiers.
+
+### Primary Parameters (High-Frequency Real-Time Telemetry)
+
+*Updated in seconds to minutes. Drives instant alert triggers and immediate trend analysis.*
+
+| Sr No. | Parameter Name | Description | Unit |
+| --- | --- | --- | --- |
+| 1 | Heart Rate (HR) | Resting heart rate and sustained tachycardia trends | beats/min (bpm) |
+| 2 | Respiratory Rate (RR) | Frequency of breaths, tracking early compensatory tachypnea | breaths/min |
+| 3 | Mean Arterial Pressure (MAP) | Average arterial pressure driving systemic tissue perfusion | mmHg |
+| 4 | Systolic Blood Pressure (SBP) | Peak arterial pressure during cardiac contraction | mmHg |
+| 5 | Diastolic Blood Pressure (DBP) | Minimum arterial pressure during cardiac relaxation | mmHg |
+| 6 | Core Body Temperature | Internal body temperature tracking hyperthermia or occult hypothermia | °C |
+| 7 | Peripheral Oxygen Saturation (SpO2) | Continuous pulse oximetry tracking micro-vascular desaturation | % |
+| 8 | Heart Rate Variability (HRV - RMSSD/SDNN) | Autonomic nervous system high-frequency fluctuation and decoupling | ms (milliseconds) |
+| 9 | Pulse Wave Velocity (PWV) / PPG | Arterial stiffness and microvascular tone characteristics | m/s or index |
+| 10 | Core-to-Peripheral Temp Gradient | Thermal differential between core body and extremities (vasoconstriction indicator) | °C |
+| 11 | Galvanic Skin Response (GSR) | Electrodermal activity signaling sympathetic stress and inflammatory surges | microSiemens ($\mu$S) |
+| 12 | Actigraphy / Movement Decay | Continuous physical activity and micro-movement cessation tracking fatigue | activity score / steps/min |
+
+---
+
+### 🟡 Secondary Parameters (Intermittent Labs & Biomarkers)
+
+*Updated via blood work every 1 to 12 hours. Quantifies cellular damage, metabolic acidosis, and organ dysfunction.*
+
+| Sr No. | Parameter Name | Description | Unit |
+| --- | --- | --- | --- |
+| 1 | Blood Lactate | Gold standard marker of cellular hypoperfusion and anaerobic metabolism | mmol/L |
+| 2 | Arterial pH | Measure of systemic blood acidity / acidemia progression | pH units |
+| 3 | Serum Bicarbonate (HCO3-) | Buffer capacity tracking metabolic acid accumulation | mmol/L |
+| 4 | Base Excess / Deficit | Quantifies the severity of metabolic acid-base imbalance | mmol/L |
+| 5 | Procalcitonin (PCT) | Biomarker specific to bacterial infection and sepsis severity | ng/mL |
+| 6 | C-Reactive Protein (CRP) | Acute phase systemic inflammatory response reactant | mg/L |
+| 7 | Interleukin-6 (IL-6) / Cytokines | Pro-inflammatory cytokine cascade drivers | pg/mL |
+| 8 | White Blood Cell (WBC) Count | Total leukocyte count indicating infection, leukocytosis, or leukopenia | cells/$\mu$L |
+| 9 | Bandemia (Immature Neutrophils) | Percentage of immature neutrophils indicating bone marrow overdrive ("left shift") | % |
+| 10 | Neutrophil-to-Lymphocyte Ratio (NLR) | Ratio indicating severe systemic immune dysregulation | ratio |
+| 11 | Platelet Count | Circulating platelets tracking consumption and Disseminated Intravascular Coagulation (DIC) | platelets/$\mu$L |
+| 12 | D-Dimer & Fibrinogen | Markers of microvascular clot formation and fibrinolysis | mg/L FEU or g/L |
+| 13 | Prothrombin Time (PT) / INR | Coagulopathy and clotting time progression | seconds / ratio |
+| 14 | Serum Creatinine | Renal filtration marker tracking Acute Kidney Injury (AKI) | mg/dL |
+| 15 | Blood Urea Nitrogen (BUN) | Nitrogen waste product reflecting renal stress and filtration failure | mg/dL |
+| 16 | Urine Output Rate | Volume of urine excreted per body weight per hour (oliguria indicator) | mL/kg/h |
+| 17 | Total Bilirubin & Liver Enzymes | Markers of hepatic dysfunction (ALT, AST, Bilirubin) | U/L or $\mu$mol/L |
+| 18 | Serum Albumin | Protein marker tracking capillary leak syndrome and vascular permeability | g/dL |
+
+---
+
+### 🟢 Tertiary Parameters (Static Baseline, Clinical History & Environmental Triggers)
+
+*Long-term EHR structural baseline data, intervention control vectors, and external environmental stressors.*
+
+| Sr No. | Parameter Name | Description | Unit |
+| --- | --- | --- | --- |
+| 1 | Recent Surgical History | Major prior operations (e.g., abdominal/GI surgery) carrying translocation risks | Binary / Category |
+| 2 | Invasive Lines & Devices | Presence of central venous catheters, Foley catheters, or endotracheal tubes | Binary / Category |
+| 3 | Post-Surgery Elapsed Time | Time duration since the primary surgical intervention | Days |
+| 4 | Immunosuppressants & Steroids | Ongoing drugs suppressing immune response and masking fever | Binary / Dosage |
+| 5 | Antihypertensives / Beta-Blockers | Medications masking compensatory tachycardia and heart rate response | Binary / Dosage |
+| 6 | Anticoagulants | Blood-thinning drugs elevating internal bleeding and DIC risks | Binary / Dosage |
+| 7 | Recent Antibiotic Exposure | Prior antibiotic history and multi-drug resistant (MDR) pathogen risk profile | Binary / Category |
+| 8 | Age & Biological Sex | Patient baseline demographics and immunosenescence vulnerability | Years / Category |
+| 9 | Body Mass Index (BMI) / Adiposity | Baseline metabolic and structural weight configuration | $\text{kg/m}^2$ |
+| 10 | Chronic Kidney Disease (CKD) | Pre-existing renal filtration compromise | Binary / Stage |
+| 11 | Chronic Liver Disease / Cirrhosis | Pre-existing hepatic impairment and baseline coagulopathy | Binary / Stage |
+| 12 | Diabetes Mellitus | Pre-existing metabolic condition affecting neutrophil function | Binary / Status |
+| 13 | Chronic Respiratory Disease (COPD) | Baseline lung capacity and oxygen reserve constraints | Binary / Severity |
+| 14 | Active Cancer / Chemotherapy | Pre-existing bone marrow suppression and immunodeficiency | Binary / Status |
+| 15 | Ambient Air Quality Index (AQI) | External particulate matter (PM2.5) environmental trigger | $\mu\text{g/m}^3$ or AQI |
+| 16 | Ambient Temperature & Humidity | External thermal stress indicators affecting vascular tone | °C / % |

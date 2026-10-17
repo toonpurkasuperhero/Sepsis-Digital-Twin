@@ -1,0 +1,77 @@
+{
+  "semi_synthetic_benchmark": [
+    {
+      "plan": "fluid_every_hour",
+      "transition_model": "gbm",
+      "true_mean_effect_mmHg": 6.2,
+      "gcomp_mean_effect_mmHg": 3.404262214216454,
+      "naive_mean_effect_mmHg": 0.04015744068101779,
+      "gcomp_abs_bias": 2.7957377857835453,
+      "naive_abs_bias": 6.1598425593189825,
+      "gcomp_interval_coverage_90": 0.0,
+      "refused": 7,
+      "patients": 60
+    },
+    {
+      "plan": "start_vasopressor",
+      "transition_model": "gbm",
+      "true_mean_effect_mmHg": 8.0,
+      "gcomp_mean_effect_mmHg": 6.984008861894377,
+      "naive_mean_effect_mmHg": 6.267444703880784,
+      "gcomp_abs_bias": 1.0159911381056164,
+      "naive_abs_bias": 1.7325552961192159,
+      "gcomp_interval_coverage_90": 0.8888888888888888,
+      "refused": 51,
+      "patients": 60
+    },
+    {
+      "plan": "fluid_every_hour",
+      "transition_model": "linear",
+      "true_mean_effect_mmHg": 6.2,
+      "gcomp_mean_effect_mmHg": 4.317443856253608,
+      "naive_mean_effect_mmHg": 0.04015744068101779,
+      "gcomp_abs_bias": 1.882556143746391,
+      "naive_abs_bias": 6.1598425593189825,
+      "gcomp_interval_coverage_90": 0.0,
+      "refused": 7,
+      "patients": 60
+    },
+    {
+      "plan": "start_vasopressor",
+      "transition_model": "linear",
+      "true_mean_effect_mmHg": 8.0,
+      "gcomp_mean_effect_mmHg": 7.644616704243101,
+      "naive_mean_effect_mmHg": 6.267444703880784,
+      "gcomp_abs_bias": 0.35538329575689254,
+      "naive_abs_bias": 1.7325552961192159,
+      "gcomp_interval_coverage_90": 0.0,
+      "refused": 51,
+      "patients": 60
+    }
+  ],
+  "positivity_check": {
+    "patient_map_mmHg": 94.78979263699213,
+    "answered": false,
+    "propensity": {
+      "fluid": 0.9940710390359544,
+      "vaso": 0.0003489987169645057
+    },
+    "reason": "Positivity check failed: similar patients rarely received this plan (propensity 0.000 < 0.02). The engine will not extrapolate."
+  },
+  "mimic_demo": {
+    "status": "PLUMBING ONLY - 100-patient demo, not clinically valid",
+    "stays_used": 110,
+    "example_stay": 30057454,
+    "answered": true,
+    "propensity": {
+      "fluid": 0.05837889780084214,
+      "vaso": 0.9903428365956364
+    },
+    "map_difference_6h_mmHg": {
+      "difference_mean": -0.508752866321437,
+      "difference_p05": -2.470344568810533,
+      "difference_p95": 1.277550165006559
+    },
+    "reason": null
+  }
+}

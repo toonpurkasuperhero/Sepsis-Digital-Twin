@@ -1,0 +1,16 @@
+{
+  "mode": "silent: no alerts shown, predictions logged only",
+  "stays_replayed": 1000,
+  "hours": 37814,
+  "causality_max_abs_risk_difference": 2.6926398277282715e-05,
+  "causality_ok": true,
+  "threshold_6h": 0.007241929415613413,
+  "would_be_alerts_per_patient_day": 6.449992015755576,
+  "septic_stays_in_sample": 41,
+  "septic_flagged_in_12h_before_onset_pct": 78.04878048780488,
+  "dominant_stream_share": {
+    "E1_vitals": 0.671,
+    "E3_static": 0.285,
+    "E2_labs": 0.044
+  }
+}

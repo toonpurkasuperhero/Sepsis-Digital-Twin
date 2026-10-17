@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.tox/
+.nox/
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Raw & Intermediate Clinical Datasets (Downloaded via scripts/)
+data/raw/*
+!data/raw/.gitkeep
+data/staging/
+data/*/staging/
+data/full/
+data/processed/
+
+# System generated and temporary files
+*.log
+.system_generated/
+scratch/

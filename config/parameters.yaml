@@ -1,0 +1,164 @@
+# Parameter catalogue for the Sepsis Digital Twin (MIMIC-IV source).
+#
+# Every parameter lists the MIMIC-IV itemids it is read from and the label each
+# itemid is expected to carry. `sdt.sources.mimic.verify_itemids` checks these
+# against d_items / d_labitems and fails loudly on a mismatch, so a wrong id can
+# never silently feed the data lakes.
+#
+# hard_limits:  outside -> flag "impossible", removed (quality gate check 3).
+#               Vital-sign bounds follow the filters used in the MIT-LCP
+#               mimic-code `vitalsign` concept.
+# extreme:      outside -> flag "extreme", KEPT (real but rare physiology).
+# max_jump:     largest plausible change between consecutive values within
+#               `jump_window_min`; larger -> flag "suspect" (check 6).
+# max_age_h:    how long a value may be carried forward when a derived
+#               parameter needs it at a later hour (causal LOCF only).
+
+primary:            # Layer 1: bedside telemetry (chartevents)
+  heart_rate:
+    unit: bpm
+    itemids: {220045: "Heart Rate"}
+    hard_limits: [0, 300]
+    extreme: [30, 200]
+    max_jump: 80
+    jump_window_min: 5
+    max_age_h: 2
+  resp_rate:
+    unit: breaths/min
+    itemids: {220210: "Respiratory Rate", 224690: "Respiratory Rate (Total)"}
+    hard_limits: [0, 70]
+    extreme: [5, 50]
+    max_age_h: 2
+  sbp:
+    unit: mmHg
+    itemids: {220050: "Arterial Blood Pressure systolic", 220179: "Non Invasive Blood Pressure systolic"}
+    hard_limits: [0, 400]
+    extreme: [50, 250]
+    max_jump: 100
+    jump_window_min: 5
+    max_age_h: 2
+  dbp:
+    unit: mmHg
+    itemids: {220051: "Arterial Blood Pressure diastolic", 220180: "Non Invasive Blood Pressure diastolic"}
+    hard_limits: [0, 300]
+    extreme: [20, 150]
+    max_age_h: 2
+  map:
+    unit: mmHg
+    itemids: {220052: "Arterial Blood Pressure mean", 220181: "Non Invasive Blood Pressure mean", 225312: "ART BP Mean"}
+    hard_limits: [0, 300]
+    extreme: [35, 180]
+    max_age_h: 2
+  temperature:
+    unit: degC
+    itemids: {223762: "Temperature Celsius", 223761: "Temperature Fahrenheit"}
+    convert: {223761: "f_to_c"}
+    hard_limits: [10, 50]
+    extreme: [33, 42]
+    max_age_h: 8
+  spo2:
+    unit: "%"
+    itemids: {220277: "O2 saturation pulseoxymetry"}
+    hard_limits: [0, 100]
+    extreme: [70, 100]
+    max_age_h: 2
+  fio2:
+    unit: fraction
+    itemids: {223835: "Inspired O2 Fraction"}
+    convert: {223835: "percent_to_fraction_if_gt1"}
+    hard_limits: [0.21, 1.0]
+    extreme: [0.21, 1.0]
+    max_age_h: 24
+  o2_flow:
+    unit: L/min
+    itemids: {223834: "O2 Flow"}
+    hard_limits: [0, 80]
+    extreme: [0, 70]
+    max_age_h: 12
+  gcs_eye:
+    unit: points
+    itemids: {220739: "GCS - Eye Opening"}
+    hard_limits: [1, 4]
+    max_age_h: 8
+  gcs_verbal:
+    unit: points
+    itemids: {223900: "GCS - Verbal Response"}
+    hard_limits: [0, 5]       # MIMIC codes "No Response-ETT" as 0
+    max_age_h: 8
+  gcs_motor:
+    unit: points
+    itemids: {223901: "GCS - Motor Response"}
+    hard_limits: [1, 6]
+    max_age_h: 8
+  glucose_poc:
+    unit: mg/dL
+    itemids: {225664: "Glucose finger stick (range 70-100)", 220621: "Glucose (serum)"}
+    hard_limits: [1, 2000]
+    extreme: [40, 600]
+    max_age_h: 12
+  # Wearable-only parameters (GSR, actigraphy, PWV, HRV, toe temperature,
+  # perfusion index) are not recorded in MIMIC-IV. They exist in the schema
+  # so the model can be built with them masked, and are filled in Phase 6.
+  hrv_rmssd:  {unit: ms, itemids: {}, source: wearable, hard_limits: [0, 500], extreme: [2, 200], max_age_h: 1}
+  hrv_sdnn:   {unit: ms, itemids: {}, source: wearable, hard_limits: [0, 500], extreme: [5, 250], max_age_h: 1}
+  gsr:        {unit: uS, itemids: {}, source: wearable, hard_limits: [0, 100], extreme: [0.05, 40], max_age_h: 1}
+  actigraphy: {unit: counts/min, itemids: {}, source: wearable, hard_limits: [0, 20000], max_age_h: 1}
+  toe_temperature: {unit: degC, itemids: {}, source: wearable, hard_limits: [10, 42], extreme: [18, 38], max_age_h: 2}
+  perfusion_index: {unit: "%", itemids: {}, source: wearable, hard_limits: [0, 30], extreme: [0.2, 20], max_age_h: 1}
+
+urine_output:       # outputevents; 227488 (GU irrigant in) is subtracted
+  unit: mL
+  itemids:
+    226559: "Foley"
+    226560: "Void"
+    226561: "Condom Cath"
+    226584: "Ileoconduit"
+    226563: "Suprapubic"
+    226564: "R Nephrostomy"
+    226565: "L Nephrostomy"
+    226567: "Straight Cath"
+    226557: "R Ureteral Stent"
+    226558: "L Ureteral Stent"
+    227489: "GU Irrigant/Urine Volume Out"
+  negative_itemids:
+    227488: "GU Irrigant Volume In"
+  hard_limits: [-5000, 5000]
+
+secondary:          # Layer 2: labevents
+  lactate:     {unit: mmol/L, itemids: {50813: "Lactate"}, hard_limits: [0.1, 40], extreme: [0.3, 15], max_age_h: 12}
+  ph:          {unit: pH, itemids: {50820: "pH"}, hard_limits: [6.5, 8.0], extreme: [6.9, 7.7], max_age_h: 12}
+  bicarbonate: {unit: mmol/L, itemids: {50882: "Bicarbonate"}, hard_limits: [1, 70], extreme: [8, 45], max_age_h: 24}
+  base_excess: {unit: mmol/L, itemids: {50802: "Base Excess"}, hard_limits: [-40, 40], extreme: [-20, 20], max_age_h: 12}
+  pao2:        {unit: mmHg, itemids: {50821: "pO2"}, hard_limits: [10, 800], extreme: [40, 600], max_age_h: 6}
+  paco2:       {unit: mmHg, itemids: {50818: "pCO2"}, hard_limits: [5, 200], extreme: [20, 100], max_age_h: 6}
+  creatinine:  {unit: mg/dL, itemids: {50912: "Creatinine"}, hard_limits: [0.05, 30], extreme: [0.2, 12], max_age_h: 48}
+  bun:         {unit: mg/dL, itemids: {51006: "Urea Nitrogen"}, hard_limits: [1, 300], extreme: [2, 150], max_age_h: 48}
+  bilirubin:   {unit: mg/dL, itemids: {50885: "Bilirubin, Total"}, hard_limits: [0.05, 80], extreme: [0.1, 30], max_age_h: 48}
+  alt:         {unit: IU/L, itemids: {50861: "Alanine Aminotransferase (ALT)"}, hard_limits: [1, 20000], extreme: [3, 3000], max_age_h: 48}
+  ast:         {unit: IU/L, itemids: {50878: "Asparate Aminotransferase (AST)"}, hard_limits: [1, 30000], extreme: [3, 3000], max_age_h: 48}
+  albumin:     {unit: g/dL, itemids: {50862: "Albumin"}, hard_limits: [0.5, 7], extreme: [1.0, 6], max_age_h: 72}
+  platelets:   {unit: K/uL, itemids: {51265: "Platelet Count"}, hard_limits: [1, 3000], extreme: [10, 1000], max_age_h: 48}
+  wbc:         {unit: K/uL, itemids: {51301: "White Blood Cells", 51300: "WBC Count"}, hard_limits: [0.01, 500], extreme: [0.5, 100], max_age_h: 48}
+  neutrophils_pct: {unit: "%", itemids: {51256: "Neutrophils"}, hard_limits: [0, 100], max_age_h: 48}
+  lymphocytes_pct: {unit: "%", itemids: {51244: "Lymphocytes"}, hard_limits: [0, 100], max_age_h: 48}
+  bands_pct:   {unit: "%", itemids: {51144: "Bands"}, hard_limits: [0, 100], max_age_h: 48}
+  hemoglobin:  {unit: g/dL, itemids: {51222: "Hemoglobin"}, hard_limits: [1, 25], extreme: [5, 20], max_age_h: 24}
+  sodium:      {unit: mmol/L, itemids: {50983: "Sodium"}, hard_limits: [90, 200], extreme: [115, 165], max_age_h: 24}
+  potassium:   {unit: mmol/L, itemids: {50971: "Potassium"}, hard_limits: [1, 12], extreme: [2.0, 7.5], max_age_h: 24}
+  chloride:    {unit: mmol/L, itemids: {50902: "Chloride"}, hard_limits: [50, 160], extreme: [80, 135], max_age_h: 24}
+  glucose_lab: {unit: mg/dL, itemids: {50931: "Glucose"}, hard_limits: [1, 2000], extreme: [40, 600], max_age_h: 24}
+  inr:         {unit: ratio, itemids: {51237: "INR(PT)"}, hard_limits: [0.5, 25], extreme: [0.8, 8], max_age_h: 48}
+  pt:          {unit: s, itemids: {51274: "PT"}, hard_limits: [5, 200], extreme: [9, 80], max_age_h: 48}
+  fibrinogen:  {unit: mg/dL, itemids: {51214: "Fibrinogen, Functional"}, hard_limits: [10, 2000], extreme: [80, 900], max_age_h: 48}
+  d_dimer:     {unit: ng/mL, itemids: {50915: "D-Dimer"}, hard_limits: [1, 100000], max_age_h: 72}
+  crp:         {unit: mg/L, itemids: {50889: "C-Reactive Protein"}, hard_limits: [0, 1000], max_age_h: 72}
+  troponin_t:  {unit: ng/mL, itemids: {51003: "Troponin T"}, hard_limits: [0, 100], max_age_h: 48}
+
+# Thresholds for derived parameters (see Layer 1/2 tables in the plan).
+derived:
+  spo2_max_for_pf_imputation: 96     # Brown et al. 2016: non-linear S/F->P/F valid only at SpO2 <= 96 %
+  nasal_cannula_fio2_per_lpm: 0.04   # common bedside approximation; stored as model-estimate
+  nasal_cannula_max_lpm: 6
+  dic_d_dimer_moderate_ngml: 1000    # ISTH overt-DIC D-dimer bands are assay-specific:
+  dic_d_dimer_strong_ngml: 5000      #   set these from the local lab before use
+  dic_normal_pt_s: 12.0              # reference PT for "PT prolongation"

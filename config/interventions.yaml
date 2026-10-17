@@ -1,0 +1,59 @@
+# Intervention stream (stream 4). These are the actions the later what-if
+# engine will vary; for now they are model inputs and SOFA/shock inputs.
+
+vasopressors:       # icu.inputevents, rate in mcg/kg/min unless noted
+  # Norepinephrine-equivalent factors: Goradia et al. 2021, J Crit Care
+  # (vasopressin 0.04 U/min ~ 0.1 mcg/kg/min norepinephrine).
+  norepinephrine: {itemid: 221906, label: "Norepinephrine", ne_factor: 1.0}
+  epinephrine:    {itemid: 221289, label: "Epinephrine", ne_factor: 1.0}
+  dopamine:       {itemid: 221662, label: "Dopamine", ne_factor: 0.01}
+  phenylephrine:  {itemid: 221749, label: "Phenylephrine", ne_factor: 0.1}
+  vasopressin:    {itemid: 222315, label: "Vasopressin", ne_factor: 2.5, rate_unit: units/min}
+  dobutamine:     {itemid: 221653, label: "Dobutamine", ne_factor: 0.0}   # inotrope: SOFA only
+  milrinone:      {itemid: 221986, label: "Milrinone", ne_factor: 0.0}
+
+iv_fluids:          # icu.inputevents, amount in mL
+  itemids:
+    225158: "NaCl 0.9%"
+    225828: "LR"
+    225159: "NaCl 0.45%"
+    225161: "NaCl 3% (Hypertonic Saline)"
+    225823: "D5 1/2NS"
+    225825: "D5NS"
+    225827: "D5LR"
+    225941: "D5 1/4NS"
+    220949: "Dextrose 5%"
+    220862: "Albumin 25%"
+    220864: "Albumin 5%"
+
+ventilation:        # icu.procedureevents
+  invasive: {itemid: 225792, label: "Invasive Ventilation"}
+  noninvasive: {itemid: 225794, label: "Non-invasive Ventilation"}
+
+# hosp.prescriptions, matched on lower-case drug name. Route filter removes
+# eye/ear/topical forms (as in the MIT-LCP mimic-code antibiotic concept).
+excluded_routes: [OU, OS, OD, AU, AS, AD, TP, "EX"]
+excluded_drug_words: [cream, ointment, ophth, gel, desensitization, topical, vaginal, lotion, "eye drop"]
+
+drug_classes:
+  antibiotic: [amikacin, ampicillin, azithromycin, aztreonam, cefazolin, cefepime, cefotaxime,
+               cefotetan, cefoxitin, ceftaroline, ceftazidime, ceftriaxone, cefuroxime, cephalexin,
+               ciprofloxacin, clarithromycin, clindamycin, colistin, daptomycin, doxycycline,
+               ertapenem, erythromycin, gentamicin, imipenem, levofloxacin, linezolid, meropenem,
+               metronidazole, minocycline, moxifloxacin, nafcillin, nitrofurantoin, oxacillin,
+               penicillin, piperacillin, polymyxin, rifampin, streptomycin, sulfamethoxazole,
+               tetracycline, tigecycline, tobramycin, vancomycin, bactrim]
+  beta_blocker: [metoprolol, atenolol, carvedilol, labetalol, esmolol, propranolol, bisoprolol,
+                 nadolol, sotalol, nebivolol]
+  other_antihypertensive: [amlodipine, lisinopril, losartan, hydralazine, nifedipine, diltiazem,
+                           captopril, enalapril, valsartan, clonidine, nicardipine]
+  corticosteroid: [hydrocortisone, methylprednisolone, dexamethasone, prednisone, prednisolone,
+                   fludrocortisone]
+  anticoagulant: [enoxaparin, warfarin, apixaban, rivaroxaban, argatroban, bivalirudin,
+                  dabigatran, fondaparinux, "heparin sodium"]
+  immunosuppressant: [tacrolimus, cyclosporine, mycophenolate, azathioprine, sirolimus,
+                      everolimus, methotrexate]
+  insulin: [insulin]
+
+# Heparin flushes / lock solutions are not anticoagulation.
+anticoagulant_exclude_words: [flush, lock, "line"]

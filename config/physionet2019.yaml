@@ -1,0 +1,63 @@
+# PhysioNet/CinC Challenge 2019 adapter (open access, CC BY 4.0).
+# Reyna et al. 2020, Crit Care Med. Hourly rows; columns map onto SDT parameters.
+# Parameters already defined in parameters.yaml reuse their limits there;
+# extra challenge-only parameters are defined here.
+
+root: data/raw/physionet2019
+output_root: data/physionet2019
+
+columns:            # challenge column -> SDT parameter
+  HR: heart_rate
+  O2Sat: spo2
+  Temp: temperature
+  SBP: sbp
+  MAP: map
+  DBP: dbp
+  Resp: resp_rate
+  FiO2: fio2
+  BaseExcess: base_excess
+  HCO3: bicarbonate
+  pH: ph
+  PaCO2: paco2
+  AST: ast
+  BUN: bun
+  Chloride: chloride
+  Creatinine: creatinine
+  Glucose: glucose_lab
+  Lactate: lactate
+  Potassium: potassium
+  Bilirubin_total: bilirubin
+  Hgb: hemoglobin
+  WBC: wbc
+  Fibrinogen: fibrinogen
+  Platelets: platelets
+  EtCO2: etco2
+  SaO2: sao2
+  Alkalinephos: alk_phos
+  Calcium: calcium
+  Magnesium: magnesium
+  Phosphate: phosphate
+  Bilirubin_direct: bilirubin_direct
+  TroponinI: troponin_i
+  Hct: hematocrit
+  PTT: ptt
+
+# Layer of each challenge-only parameter, plus its gate limits.
+extra_params:
+  etco2:            {layer: primary, unit: mmHg, hard_limits: [0, 100], extreme: [10, 60], max_age_h: 4}
+  sao2:             {layer: secondary, unit: "%", hard_limits: [0, 100], extreme: [70, 100], max_age_h: 6}
+  alk_phos:         {layer: secondary, unit: IU/L, hard_limits: [1, 5000], extreme: [20, 1000], max_age_h: 48}
+  calcium:          {layer: secondary, unit: mg/dL, hard_limits: [2, 20], extreme: [6, 13], max_age_h: 48}
+  magnesium:        {layer: secondary, unit: mg/dL, hard_limits: [0.3, 10], extreme: [1, 4], max_age_h: 48}
+  phosphate:        {layer: secondary, unit: mg/dL, hard_limits: [0.3, 25], extreme: [1, 9], max_age_h: 48}
+  bilirubin_direct: {layer: secondary, unit: mg/dL, hard_limits: [0, 60], extreme: [0, 20], max_age_h: 48}
+  troponin_i:       {layer: secondary, unit: ng/mL, hard_limits: [0, 500], extreme: [0, 50], max_age_h: 48}
+  hematocrit:       {layer: secondary, unit: "%", hard_limits: [5, 75], extreme: [15, 60], max_age_h: 24}
+  ptt:              {layer: secondary, unit: s, hard_limits: [10, 250], extreme: [20, 150], max_age_h: 48}
+
+# The challenge sets SepsisLabel = 1 from 6 h BEFORE onset (t_sepsis - 6)
+# onward, so onset hour = first positive row + 6.
+label_shift_h: 6
+
+# FiO2 is simply missing when not charted here; it does NOT imply room air.
+assume_room_air: false
